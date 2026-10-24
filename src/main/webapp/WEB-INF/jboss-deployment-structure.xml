@@ -1,0 +1,7 @@
+<jboss-deployment-structure>
+    <deployment>
+        <exclusions>
+            <module name="net.sf.jasperreports.jasperreports"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>
