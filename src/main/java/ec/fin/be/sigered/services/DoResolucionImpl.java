@@ -12,12 +12,9 @@ import ec.fin.be.sigered.dto.ResolucionDocumentoDto;
 import ec.fin.be.sigered.dto.ResolucionDto;
 import ec.fin.be.sigered.dto.ResolucionFiltroDto;
 import ec.fin.be.sigered.dto.ResponseDto;
-import ec.fin.be.sigered.dto.RowBackupDto;
-import ec.fin.be.sigered.dto.SolicitudDto;
 import ec.fin.be.sigered.primary.entity.DoResolucion;
 import ec.fin.be.sigered.primary.entity.DoResolucionDocumento;
 import ec.fin.be.sigered.logger.LoggerSigered;
-import ec.fin.be.sigered.primary.entity.DoGerencia;
 import ec.fin.be.sigered.primary.repository.DoResolucionesDocumentoRepositorio;
 import ec.fin.be.sigered.primary.repository.DoResolucionesRepositorio;
 import ec.fin.be.sigered.utils.Constantes;
@@ -42,6 +39,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.HashMap;
@@ -49,7 +48,6 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -387,7 +385,7 @@ public class DoResolucionImpl implements DoResolucionServicio{
     
         private void insertarDetalles(List<DoResolucion> resoluciones , DateTimeFormatter dateFormatter, XSSFSheet sheet,
             CellStyle estiloBorde, int filaDetalle) {
-                
+                LocalDate fechaActual=LocalDate.now();
         for (int i = 0; i < resoluciones.size(); i++) {
 
             DoResolucion resolucion = resoluciones.get(i);
@@ -397,16 +395,22 @@ public class DoResolucionImpl implements DoResolucionServicio{
                 XSSFCell cell = row.createCell(j);
                 cell.setCellStyle(estiloBorde);
             }
+            
+            Period periodo = Period.between(resolucion.getReFechaResolucion(), fechaActual);
 
             row.getCell(0).setCellValue("RESOLUCION ADMINISTRATIVA");
             row.getCell(2).setCellValue(resolucion.getReNombreSuscrito()!= null ? resolucion.getReNombreSuscrito() : "");
             row.getCell(3).setCellValue(resolucion.getReResolucion());
             row.getCell(4).setCellValue(resolucion.getReDescripcion() != null ? resolucion.getReDescripcion() : "");
+            
+            
 
             row.getCell(5).setCellValue(resolucion.getReFechaResolucion().format(dateFormatter));
             row.getCell(6).setCellValue(resolucion.getReFechaFinVigencia() != null ? resolucion.getReFechaFinVigencia().format(dateFormatter) : "");
             
             StringBuilder tamanos = obtenerCadenaTamanoDocumentos(resolucion);
+            
+            row.getCell(8).setCellValue(periodo.getYears()<10?"Conservación":"Eliminación");
 
             row.getCell(7).setCellValue(tamanos.toString());
             row.getCell(9).setCellValue("DIGITAL");
@@ -415,6 +419,7 @@ public class DoResolucionImpl implements DoResolucionServicio{
                     
             row.getCell(10).setCellValue(rutas.toString());
             row.getCell(11).setCellValue(resolucion.getReObservacion());
+            row.getCell(12).setCellValue(resolucion.getReInsubsistente());
 
         }
     }
