@@ -49,12 +49,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String token = authorizationHeader.replace(HEADER_TOKEN_PREFIX, "");
                 String username = jwtService.extractUsername(token);
                 String cedula = jwtService.extractCedula(token);
-    
+                
                 UserDetails userDetails = myUserDetailService.loadUserByUsername(username);
                 if (jwtService.validateToken(token, username)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());
                     authentication.setDetails(cedula);
+                    
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    
                 }
             }
             filterChain.doFilter(request, response);

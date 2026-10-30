@@ -8,6 +8,7 @@ package ec.fin.be.sigered.primary.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,6 +22,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -50,6 +53,16 @@ public class DoResolucion implements Serializable {
 
     @Column(name = "re_fecha_resolucion")
     private LocalDate reFechaResolucion;
+    @Column(name = "re_fecha_fin_vigencia")
+    
+    private LocalDate reFechaFinVigencia;
+    @Column(name = "re_fecha_registro")
+    private LocalDateTime reFechaRegistro;
+    @Column(name = "re_fecha_actualiza")
+
+    private LocalDateTime reFechaActualiza;
+    @OneToMany(mappedBy = "scResolucion")
+    private List<DoSolicitudCambioResolucion> doSolicitudCambioResolucionList;
     @Size(max = 25)
     @Column(name = "re_suscrito")
     private String reSuscrito;
@@ -63,15 +76,9 @@ public class DoResolucion implements Serializable {
     @Size(max = 65535)
     @Column(name = "re_descripcion")
     private String reDescripcion;
-    @Column(name = "re_fecha_fin_vigencia")
-    private LocalDate reFechaFinVigencia;
     @Size(max = 25)
     @Column(name = "re_insubsistente")
     private String reInsubsistente;
-    @Column(name = "re_fecha_registro")
-    private LocalDateTime reFechaRegistro;
-    @Column(name = "re_fecha_actualiza")
-    private LocalDateTime reFechaActualiza;
 
     @Size(max = 25)
     @Column(name = "re_area")
@@ -305,6 +312,16 @@ public class DoResolucion implements Serializable {
 
     public void setReInsubsistente(String reInsubsistente) {
         this.reInsubsistente = reInsubsistente;
+    }
+
+
+    @XmlTransient
+    public List<DoSolicitudCambioResolucion> getDoSolicitudCambioResolucionList() {
+        return doSolicitudCambioResolucionList;
+    }
+
+    public void setDoSolicitudCambioResolucionList(List<DoSolicitudCambioResolucion> doSolicitudCambioResolucionList) {
+        this.doSolicitudCambioResolucionList = doSolicitudCambioResolucionList;
     }
 
     

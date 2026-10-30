@@ -20,4 +20,6 @@ public interface VisGthEmpleadosActivosRepository extends JpaRepository<VisGthEm
     
     List <VisGthEmpleadosActivos> findByNomEmpleadoEmpContainingOrderByNomEmpleadoEmpAsc(String nomEmpleadoEmp);
     
+    VisGthEmpleadosActivos findByNumCedulaEmp(String numCedulaEmp);
+    
 }

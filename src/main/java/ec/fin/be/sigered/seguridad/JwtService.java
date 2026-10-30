@@ -35,6 +35,7 @@ public class JwtService {
     private static final int EXPIRATION_TIME = 1000 * 60 * 60;
     private static final String AUTHORITIES = "authorities";
     private static final String CEDULA = "cedula";
+    private static final String CORREO = "correo";
     private final String secretKey;
     private static final String ER_VALIDATE_TOKEN = "Error al validar token";
 
@@ -45,7 +46,7 @@ public class JwtService {
         secretKey = Base64.getEncoder().encodeToString("key".getBytes());
     }
 
-    public JwtDto createToken(String cedula, String usuario) throws ServiceException {
+    public JwtDto createToken(String cedula, String usuario, String correo) throws ServiceException {
         try {
             String codSistema = UtilPropertiesArquetipo.getIntances().obtenerParametro("WSDL.CodSistema");
             String urlWSSeguridad = UtilPropertiesArquetipo.getIntances().obtenerParametro("seguridad.endpoint.login");
@@ -62,12 +63,13 @@ public class JwtService {
             String jwt = Jwts.builder()
                     .setSubject(usuario)
                     .claim(CEDULA, cedula)
+                    .claim(CORREO, correo)
                     .claim(AUTHORITIES, authorities)
                     .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .signWith(SignatureAlgorithm.HS512, secretKey)
                     .compact();
 
-            return new JwtDto(cedula, usuario, jwt);
+            return new JwtDto(cedula, usuario,correo ,jwt);
             
         } catch (Exception e) {
             LOG.error("Error al crear token", e);
@@ -127,6 +129,21 @@ public class JwtService {
         } catch (Exception e) {
             LOG.error("Error al extraer cedula", e);
             throw new ServiceException("Error al extraer cedula");
+        }
+    }
+    
+    public String extractCorreo(String token) throws ServiceException {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            return claims.get(CORREO, String.class);
+
+        } catch (Exception e) {
+            LOG.error("Error al extraer correo", e);
+            throw new ServiceException("Error al extraer correo");
         }
     }
 

@@ -32,7 +32,7 @@ public class PermisosUsuarioController {
         if (dtoJwt.getCedula() != null && !dtoJwt.getCedula().isEmpty()) {
             String cedula = dtoJwt.getCedula().length() < 10 ? "0".concat(dtoJwt.getCedula()) : dtoJwt.getCedula();
 
-            return jwtService.createToken(cedula, dtoJwt.getUsuario());
+            return jwtService.createToken(cedula, dtoJwt.getUsuario(),dtoJwt.getCorreo());
         }
         throw new ServiceException("Cédula incorrecta");
     }

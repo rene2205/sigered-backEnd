@@ -127,6 +127,8 @@ public class DoResolucionImpl implements DoResolucionServicio{
             resolucion.setReInsubsistente(resolucionDto.getInsubsistente());
             resolucion = repositorioResoluciones.save(resolucion);
             
+            
+            
             if (resolucionDto.getId()==0){
                     boolean existsDocument = documentoRepositorio.existsByRdResolucionAndRdNombreDocumento(resolucion ,multipartFile.getOriginalFilename());
                     if (!existsDocument){
@@ -391,7 +393,7 @@ public class DoResolucionImpl implements DoResolucionServicio{
             DoResolucion resolucion = resoluciones.get(i);
             XSSFRow row = sheet.createRow(filaDetalle + i);
 
-            for (int j = 0; j < 12; j++) {
+            for (int j = 0; j < 13; j++) {
                 XSSFCell cell = row.createCell(j);
                 cell.setCellStyle(estiloBorde);
             }
@@ -402,9 +404,6 @@ public class DoResolucionImpl implements DoResolucionServicio{
             row.getCell(2).setCellValue(resolucion.getReNombreSuscrito()!= null ? resolucion.getReNombreSuscrito() : "");
             row.getCell(3).setCellValue(resolucion.getReResolucion());
             row.getCell(4).setCellValue(resolucion.getReDescripcion() != null ? resolucion.getReDescripcion() : "");
-            
-            
-
             row.getCell(5).setCellValue(resolucion.getReFechaResolucion().format(dateFormatter));
             row.getCell(6).setCellValue(resolucion.getReFechaFinVigencia() != null ? resolucion.getReFechaFinVigencia().format(dateFormatter) : "");
             
@@ -419,7 +418,7 @@ public class DoResolucionImpl implements DoResolucionServicio{
                     
             row.getCell(10).setCellValue(rutas.toString());
             row.getCell(11).setCellValue(resolucion.getReObservacion());
-            row.getCell(12).setCellValue(resolucion.getReInsubsistente());
+            row.getCell(12).setCellValue(resolucion.getReInsubsistente() != null ? resolucion.getReInsubsistente(): "" );
 
         }
     }

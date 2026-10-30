@@ -11,13 +11,17 @@ import ec.fin.be.sigered.dto.ResolucionDto;
 import ec.fin.be.sigered.dto.ResolucionFiltroDto;
 import ec.fin.be.sigered.dto.ResponseDto;
 import ec.fin.be.sigered.logger.LoggerSigered;
+import ec.fin.be.sigered.seguridad.JwtService;
 import ec.fin.be.sigered.services.DoResolucionServicio;
 import ec.fin.be.sigered.utils.Constantes;
 import ec.fin.be.sigered.utils.Utils;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +43,9 @@ public class ResolucionController {
     
     @Autowired
     private ObjectMapper objectMapper;
+    
+     @Autowired
+    private JwtService jwtService;
     
     @Autowired
     private DoResolucionServicio servicioResolucion;
@@ -92,7 +99,15 @@ public class ResolucionController {
     }
     
     @PostMapping("/buscarResolucionFiltro")
-    public List<ResolucionDto>  buscarResolucionFiltro (@RequestBody ResolucionFiltroDto filtro)throws ServiceException{
+    public List<ResolucionDto>  buscarResolucionFiltro (@RequestBody ResolucionFiltroDto filtro,HttpServletRequest request)throws ServiceException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String cedulaUsuario = (String) authentication.getDetails();
+        
+        String authorizationHeader = request.getHeader("Authorization");
+        String token = authorizationHeader.replace("Bearer ", "");
+        String correo= jwtService.extractCorreo(token);
+        
+        
         return servicioResolucion.buscarResolucionFiltro(filtro);
         
     }
@@ -105,6 +120,7 @@ public class ResolucionController {
     
     @PostMapping("/reporteResolucionFiltro")
     public ResponseDto  reporteResolucionFiltro (@RequestBody ResolucionFiltroDto filtro)throws ServiceException{
+        
         return servicioResolucion.reporteResolucion(filtro);
         
     }

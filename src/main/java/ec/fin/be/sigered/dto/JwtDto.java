@@ -16,11 +16,13 @@ import lombok.Data;
 public class JwtDto {
     private String cedula;
     private String usuario;
+    private String correo;
     private String jwt;
 
-    public JwtDto(String cedula, String usuario, String jwt) {
+    public JwtDto(String cedula, String usuario,String correo, String jwt) {
         this.cedula = cedula;
         this.usuario = usuario;
+        this.correo = correo;
         this.jwt = jwt;
     }
 

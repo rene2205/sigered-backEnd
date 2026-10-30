@@ -7,11 +7,11 @@
     <class>ec.fin.be.sigered.dto.ResolucionDocumentoDto</class>
     <class>ec.fin.be.sigered.primary.entity.DoResolucionDocumento</class>
     <class>ec.fin.be.sigered.primary.entity.DoResolucion</class>
+    <class>ec.fin.be.sigered.primary.entity.DoSolicitudCambioResolucion</class>
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
       <property name="hibernate.default_schema" value="res_documental"/>
       <property name="hibernate.show_sql" value="false"/>
     </properties>
   </persistence-unit>
- 
 </persistence>

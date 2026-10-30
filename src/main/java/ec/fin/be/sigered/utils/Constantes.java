@@ -114,6 +114,7 @@ public class Constantes {
         ER_ERROR,
         ER_REGISTRO_DUPLICADO,
         ER_ELIMINAR,
+        ER_EXISTS,
         ER_JSON
     }
 
